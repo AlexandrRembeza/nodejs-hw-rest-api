@@ -1,12 +1,10 @@
 const { throwParameterError } = require('../helpers/apiHelpers');
-
 const {
   getContacts,
   getContact,
   removeContact,
   addContact,
   updateContact,
-  changeContactFavoriteStatus,
 } = require('../service/contactsServices');
 
 const getAllContacts = async (_, res) => {
@@ -35,11 +33,11 @@ const updateContactById = async ({ params: { contactId }, body }, res) => {
   res.status(200).json({ contact });
 };
 
-const updateStatusContact = async ({ body, params: { contactId } }, res) => {
-  const contact = await changeContactFavoriteStatus(contactId, body);
-  if (!contact) return throwParameterError(contactId);
-  res.status(200).json({ contact });
-};
+// const updateStatusContact = async ({ body, params: { contactId } }, res) => {
+//   const contact = await updateContact(contactId, body);
+//   if (!contact) return throwParameterError(contactId);
+//   res.status(200).json({ contact });
+// };
 
 module.exports = {
   getAllContacts,
@@ -47,5 +45,5 @@ module.exports = {
   deleteContactById,
   addNewContact,
   updateContactById,
-  updateStatusContact,
+  // updateStatusContact,
 };

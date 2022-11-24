@@ -1,8 +1,10 @@
 const express = require('express');
 const {
-  addContactValidation,
-  updateContactValidation,
-  updateStatusContactValidation,
+  addContactValidationSchema,
+  updateContactValidationSchema,
+  updateStatusContactValidationSchema,
+  isValidId,
+  requestBodyValidation,
 } = require('../../middleware/validationsMiddlewares');
 const {
   getAllContacts,
@@ -10,22 +12,26 @@ const {
   deleteContactById,
   addNewContact,
   updateContactById,
-  updateStatusContact,
 } = require('../../controllers/contactsControllers');
-const { asyncWrapper, isValidId } = require('../../helpers/apiHelpers');
+const { asyncWrapper } = require('../../helpers/apiHelpers');
 
 const router = express.Router();
 
 router.get('/', asyncWrapper(getAllContacts));
 router.get('/:contactId', isValidId, asyncWrapper(getContactById));
-router.post('/', addContactValidation, asyncWrapper(addNewContact));
+router.post('/', requestBodyValidation(addContactValidationSchema), asyncWrapper(addNewContact));
 router.delete('/:contactId', isValidId, asyncWrapper(deleteContactById));
-router.put('/:contactId', isValidId, updateContactValidation, asyncWrapper(updateContactById));
+router.put(
+  '/:contactId',
+  isValidId,
+  requestBodyValidation(updateContactValidationSchema),
+  asyncWrapper(updateContactById)
+);
 router.patch(
   '/:contactId/favorite',
   isValidId,
-  updateStatusContactValidation,
-  asyncWrapper(updateStatusContact)
+  requestBodyValidation(updateStatusContactValidationSchema),
+  asyncWrapper(updateContactById)
 );
 
 module.exports = router;

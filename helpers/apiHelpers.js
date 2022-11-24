@@ -1,13 +1,4 @@
 const { ValidationError, WrongParametersError } = require('./errors');
-const { isValidObjectId } = require('mongoose');
-
-const isValidId = (req, _, next) => {
-  const { contactId } = req.params;
-  if (!isValidObjectId(contactId)) {
-    next(new ValidationError(`${contactId} is not correct`));
-  }
-  next();
-};
 
 const asyncWrapper = controller => {
   return (req, res, next) => {
@@ -35,7 +26,6 @@ const throwParameterError = id => {
 };
 
 module.exports = {
-  isValidId,
   asyncWrapper,
   notFoundError,
   errorHandler,

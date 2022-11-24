@@ -20,15 +20,10 @@ const updateContact = async (contactId, body) => {
   return await Contact.findByIdAndUpdate(contactId, { ...body }, { new: true });
 };
 
-const changeContactFavoriteStatus = async (contactId, { favorite }) => {
-  return await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
-};
-
 module.exports = {
   getContacts,
   getContact,
   removeContact,
   addContact,
   updateContact,
-  changeContactFavoriteStatus,
 };
