@@ -1,11 +1,10 @@
 const express = require('express');
+const { isValidId, requestBodyValidation } = require('../../middlewares/validationMiddlewares');
 const {
   addContactValidationSchema,
   updateContactValidationSchema,
   updateStatusContactValidationSchema,
-  isValidId,
-  requestBodyValidation,
-} = require('../../middleware/validationsMiddlewares');
+} = require('../../middlewares/contactsSchemas');
 const {
   getAllContacts,
   getContactById,
@@ -14,8 +13,11 @@ const {
   updateContactById,
 } = require('../../controllers/contactsControllers');
 const { asyncWrapper } = require('../../helpers/apiHelpers');
+const { authMiddleware } = require('../../middlewares/validationMiddlewares');
 
 const router = express.Router();
+
+router.use(authMiddleware);
 
 router.get('/', asyncWrapper(getAllContacts));
 router.get('/:contactId', isValidId, asyncWrapper(getContactById));
