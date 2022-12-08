@@ -14,7 +14,9 @@ const {
   logOutUser,
   getCurrentUser,
   changeUserSubscription,
+  replaceUserAvatar,
 } = require('../../controllers/userControllers');
+const upload = require('../../middlewares/multerMiddleware');
 
 const router = express.Router();
 
@@ -30,5 +32,6 @@ router.patch(
   requestBodyValidation(changeSubscriptionValidationSchema),
   asyncWrapper(changeUserSubscription)
 );
+router.patch('/avatars', upload.single('avatar'), asyncWrapper(replaceUserAvatar));
 
 module.exports = router;
