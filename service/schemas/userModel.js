@@ -15,6 +15,7 @@ const user = new Schema({
     enum: ['starter', 'pro', 'business'],
     default: 'starter',
   },
+  avatarURL: String,
 });
 user.set('versionKey', false);
 

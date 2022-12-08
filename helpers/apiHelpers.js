@@ -15,7 +15,7 @@ const notFoundError = (_, res, __) => {
   });
 };
 
-const errorHandler = (error, req, res, next) => {
+const errorHandler = (error, _, res, __) => {
   if (error instanceof MyAPI) return res.status(error.status).json({ message: error.message });
   res.status(500).json({ message: error.message });
 };

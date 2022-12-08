@@ -26,9 +26,17 @@ class NotAuthorizedError extends MyAPI {
   }
 }
 
+class WrongImageError extends MyAPI {
+  constructor(message) {
+    super(message);
+    this.status = 400;
+  }
+}
+
 module.exports = {
   MyAPI,
   ValidationError,
   WrongParametersError,
   NotAuthorizedError,
+  WrongImageError,
 };
