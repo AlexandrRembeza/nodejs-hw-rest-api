@@ -12,21 +12,22 @@ const mRes = (function mockResponse() {
   return res;
 })();
 
+const mReq = {
+  body: {
+    email: 'abcdef@mail.com',
+    password: '12345',
+  },
+};
+
+const mUser = {
+  _id: '1',
+  password: mReq.body.password,
+  email: mReq.body.email,
+  subscription: 'starter',
+};
+
 describe('logIn controller tests', () => {
   test('should 200, return token and user(email, subscription)', async () => {
-    const mReq = {
-      body: {
-        email: 'abcdef@mail.com',
-        password: '12345',
-      },
-    };
-    const mUser = {
-      _id: '1',
-      password: mReq.body.password,
-      email: mReq.body.email,
-      subscription: 'starter',
-    };
-
     const token = jwt.sign({ id: mUser._id }, secret, { expiresIn: '1y' });
 
     jest.spyOn(User, 'findOne').mockImplementation(async () => await mUser);
@@ -40,14 +41,7 @@ describe('logIn controller tests', () => {
       user: { email: mUser.email, subscription: mUser.subscription },
     });
   });
-  test('should 401 and message "Email is Wrong"', async () => {
-    const mReq = {
-      body: {
-        email: 'abcdef@mail.com',
-        password: '12345',
-      },
-    };
-
+  test('should 401 and message "Email is wrong"', async () => {
     const mUser = null;
 
     jest.spyOn(User, 'findOne').mockImplementation(async () => await mUser);
@@ -58,20 +52,6 @@ describe('logIn controller tests', () => {
     expect(mRes.json).toBeCalledWith({ message: 'Email is wrong' });
   });
   test('should 401 and message "Password is wrong"', async () => {
-    const mReq = {
-      body: {
-        email: 'abcdef@mail.com',
-        password: '12345',
-      },
-    };
-
-    const mUser = {
-      _id: '1',
-      password: mReq.body.password,
-      email: mReq.body.email,
-      subscription: 'starter',
-    };
-
     jest.spyOn(User, 'findOne').mockImplementation(async () => await mUser);
     jest.spyOn(bcrypt, 'compareSync').mockImplementation(() => false);
 
