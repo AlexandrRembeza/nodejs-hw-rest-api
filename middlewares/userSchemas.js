@@ -11,7 +11,7 @@ const addUserValidationSchema = Joi.object({
     .pattern(/\S$/, "Mustn't be spaces at the start and end of the name")
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ['com', 'net'] },
+      tlds: { allow: ['com', 'net', 'ua'] },
     })
     .required(),
   subscription: Joi.string()
@@ -33,7 +33,19 @@ const changeSubscriptionValidationSchema = Joi.object({
     .required(),
 });
 
+const reVerificationValidationSchema = Joi.object({
+  email: Joi.string()
+    .pattern(/^\S/, "Mustn't be spaces at the start and end of the name")
+    .pattern(/\S$/, "Mustn't be spaces at the start and end of the name")
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ['com', 'net', 'ua'] },
+    })
+    .required(),
+});
+
 module.exports = {
   addUserValidationSchema,
   changeSubscriptionValidationSchema,
+  reVerificationValidationSchema,
 };

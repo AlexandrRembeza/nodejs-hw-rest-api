@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('./service/schemas/userModel');
-const { logInUser } = require('./controllers/userControllers');
+const User = require('../../service/schemas/userModel');
+const { logInUser } = require('../userControllers');
 
 const secret = process.env.SECRET;
 
@@ -24,6 +24,7 @@ const mUser = {
   password: mReq.body.password,
   email: mReq.body.email,
   subscription: 'starter',
+  verify: true,
 };
 
 describe('logIn controller tests', () => {
@@ -42,9 +43,7 @@ describe('logIn controller tests', () => {
     });
   });
   test('should 401 and message "Email is wrong"', async () => {
-    const mUser = null;
-
-    jest.spyOn(User, 'findOne').mockImplementation(async () => await mUser);
+    jest.spyOn(User, 'findOne').mockImplementation(async () => await null);
 
     await logInUser(mReq, mRes);
 
@@ -59,5 +58,14 @@ describe('logIn controller tests', () => {
 
     expect(mRes.status).toBeCalledWith(401);
     expect(mRes.json).toBeCalledWith({ message: 'Password is wrong' });
+  });
+  test('should 401 and message "Not verified"', async () => {
+    jest.spyOn(User, 'findOne').mockImplementation(async () => await { verify: false });
+    jest.spyOn(bcrypt, 'compareSync').mockImplementation(() => true);
+
+    await logInUser(mReq, mRes);
+
+    expect(mRes.status).toBeCalledWith(401);
+    expect(mRes.json).toBeCalledWith({ message: 'Not verified' });
   });
 });

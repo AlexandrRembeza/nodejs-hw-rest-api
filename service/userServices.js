@@ -20,10 +20,20 @@ const replaceAvatar = async (id, avatarURL) => {
   return await User.findByIdAndUpdate(id, { avatarURL }, { new: true });
 };
 
+const findUserByToken = async verificationToken => {
+  return await User.findOne({ verificationToken });
+};
+
+const changeVerifyStatus = async _id => {
+  return await User.findByIdAndUpdate(_id, { verify: true, verificationToken: 'null' });
+};
+
 module.exports = {
   registerUser,
   findUserByEmail,
   findUserById,
   changeSubscription,
   replaceAvatar,
+  findUserByToken,
+  changeVerifyStatus,
 };
