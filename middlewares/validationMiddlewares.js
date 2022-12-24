@@ -13,7 +13,7 @@ const isValidId = ({ params: { contactId } }, _, next) => {
   next();
 };
 
-const requestBodyValidation = schema => {
+const bodyValidation = schema => {
   return (req, res, next) => {
     if (!req.body || Object.keys(req.body).length === 0)
       return res.status(400).json({ message: 'missing fields' });
@@ -43,6 +43,6 @@ const authMiddleware = async (req, _, next) => {
 
 module.exports = {
   isValidId,
-  requestBodyValidation,
+  bodyValidation,
   authMiddleware,
 };
