@@ -11,7 +11,7 @@ const {
   changeVerifyStatus,
 } = require('../service/userServices');
 const modifyImage = require('../helpers/jimpHelper');
-const sendEmailMsg = require('../helpers/nodemailerEmailMsg');
+const sendEmailMsg = require('../service/verifyEmailService');
 require('dotenv').config();
 
 const secret = process.env.SECRET;
