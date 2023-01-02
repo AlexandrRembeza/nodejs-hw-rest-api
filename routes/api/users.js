@@ -1,10 +1,10 @@
 const express = require('express');
-const { bodyValidation, authMiddleware } = require('../../middlewares/validationMiddlewares');
+const { validateBody, authMiddleware } = require('../../middlewares/validationMiddlewares');
 const {
   addUserValidationSchema,
   changeSubscriptionValidationSchema,
   reVerificationValidationSchema,
-} = require('../../middlewares/userSchemas');
+} = require('../../middlewares/validationSchemas/userSchemas');
 const { asyncWrapper } = require('../../helpers/apiHelpers');
 const {
   signUpUser,
@@ -20,10 +20,10 @@ const upload = require('../../middlewares/multerMiddleware');
 
 const router = express.Router();
 
-router.post('/signup', bodyValidation(addUserValidationSchema), asyncWrapper(signUpUser));
+router.post('/signup', validateBody(addUserValidationSchema), asyncWrapper(signUpUser));
 router.get('/verify/:verificationToken', asyncWrapper(verifyEmail));
-router.post('/verify', bodyValidation(reVerificationValidationSchema), asyncWrapper(reVerifyEmail));
-router.post('/login', bodyValidation(addUserValidationSchema), asyncWrapper(logInUser));
+router.post('/verify', validateBody(reVerificationValidationSchema), asyncWrapper(reVerifyEmail));
+router.post('/login', validateBody(addUserValidationSchema), asyncWrapper(logInUser));
 
 router.use(authMiddleware);
 
@@ -31,7 +31,7 @@ router.get('/logout', asyncWrapper(logOutUser));
 router.get('/current', asyncWrapper(getCurrentUser));
 router.patch(
   '/',
-  bodyValidation(changeSubscriptionValidationSchema),
+  validateBody(changeSubscriptionValidationSchema),
   asyncWrapper(changeUserSubscription)
 );
 router.patch('/avatars', upload.single('avatar'), asyncWrapper(replaceUserAvatar));

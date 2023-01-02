@@ -1,10 +1,10 @@
 const express = require('express');
-const { isValidId, bodyValidation } = require('../../middlewares/validationMiddlewares');
+const { isValidId, validateBody } = require('../../middlewares/validationMiddlewares');
 const {
   addContactValidationSchema,
   updateContactValidationSchema,
   updateStatusContactValidationSchema,
-} = require('../../middlewares/contactsSchemas');
+} = require('../../middlewares/validationSchemas/contactsSchemas');
 const {
   getAllContacts,
   getContactById,
@@ -21,18 +21,18 @@ router.use(authMiddleware);
 
 router.get('/', asyncWrapper(getAllContacts));
 router.get('/:contactId', isValidId, asyncWrapper(getContactById));
-router.post('/', bodyValidation(addContactValidationSchema), asyncWrapper(addNewContact));
+router.post('/', validateBody(addContactValidationSchema), asyncWrapper(addNewContact));
 router.delete('/:contactId', isValidId, asyncWrapper(deleteContactById));
 router.put(
   '/:contactId',
   isValidId,
-  bodyValidation(updateContactValidationSchema),
+  validateBody(updateContactValidationSchema),
   asyncWrapper(updateContactById)
 );
 router.patch(
   '/:contactId/favorite',
   isValidId,
-  bodyValidation(updateStatusContactValidationSchema),
+  validateBody(updateStatusContactValidationSchema),
   asyncWrapper(updateContactById)
 );
 

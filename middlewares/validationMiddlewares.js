@@ -13,7 +13,7 @@ const isValidId = ({ params: { contactId } }, _, next) => {
   next();
 };
 
-const bodyValidation = schema => {
+const validateBody = schema => {
   return (req, res, next) => {
     if (!req.body || Object.keys(req.body).length === 0)
       return res.status(400).json({ message: 'missing fields' });
@@ -30,7 +30,7 @@ const authMiddleware = async (req, _, next) => {
   const [, token] = req.headers.authorization.split(' ');
   if (!token) return next(new NotAuthorizedError('Please, provide a token'));
 
-  const { id } = jwt.decode(token, process.env.SECRET);
+  const { id } = jwt.verify(token, process.env.SECRET);
   if (!id) return next(new NotAuthorizedError('Unvalid token'));
 
   const user = await findUserById(id);
@@ -43,6 +43,6 @@ const authMiddleware = async (req, _, next) => {
 
 module.exports = {
   isValidId,
-  bodyValidation,
+  validateBody,
   authMiddleware,
 };
